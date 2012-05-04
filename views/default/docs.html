@@ -1,0 +1,86 @@
+{{extend 'default/layout_simple.html'}}
+
+<form action="." method="POST" class="form-inline">
+  <input name="keywords" value="{{=request.vars.keywords or ''}}"/>
+  <input type="submit" name="search" value="Search"
+	 onclick="window.location='{{=URL(args=request.args)}}?keywords='+escape(jQuery('input[name=keywords]').val());return false;"/>
+  <input type="submit" name="create" value="Create" 
+	 onclick="window.parent.location='{{=URL("create")}}?title='+escape(jQuery('input[name=keywords]').val());return false;"/>
+  {{if request.args:}}
+  <input type="submit" name="clone" value="Clone" 
+	 onclick="jQuery.post('{{=URL("clone",args=request.args)}}','title='+escape(jQuery('input[name=keywords]').val())).success(function(data){if(data)window.parent.location=data});return false;"/>
+  <input type="submit" name="upload" value="Upload"
+	 onclick="window.location='{{=URL("upload",args=request.args)}}?title='+escape(jQuery('input[name=keywords]').val());return false;"/>
+  {{pass}}
+  <span style="float:right">
+  {{if auth.user:}}
+  <input type="submit" name="create" value="Logout" 
+	 onclick="window.parent.location='{{=URL("user/logout")}}';return false;"/>
+  <input type="submit" name="create" value="Password" 
+	 onclick="window.parent.location='{{=URL("user/change_password")}}';return false;"/>
+  <input type="submit" name="create" value="Profile" 
+	 onclick="window.parent.location='{{=URL("user/profile")}}';return false;"/>
+  {{else:}}
+  <input type="submit" name="create" value="Loging" 
+	 onclick="window.parent.location='{{=URL("user/login")}}';return false;"/>
+  <input type="submit" name="create" value="Register" 
+	 onclick="window.parent.location='{{=URL("user/register")}}';return false;"/>
+  <input type="submit" name="create" value="Password" 
+	 onclick="window.parent.location='{{=URL("user/reset_password")}}';return false;"/>
+  {{pass}}
+  </span>
+</form>
+
+<table class="table table-condensed">
+  {{if pages:}}
+  <tr>
+    <th>Title</th>
+    <th>Type</th>
+    <th>Sync Layout</th>
+    <th>Menu Order</th>
+  </tr>
+  {{pass}}
+  {{for p in pages:}}
+  <tr>
+    <td>
+      {{=A(p.title,_href=URL('read',args=(p.id,IS_SLUG.urlify(p.title))),_target="_parent")}}
+    </td>    
+    <td>
+      {{if not p.document:}}web page{{else:}}
+      {{=A(p.document.lower().split('.')[-1],_href=URL('media',args=(p.id,IS_SLUG.urlify(p.title)+'.'+p.document.split('.')[-1].lower())),_target="_blank")}}      
+      {{pass}}
+    </td>
+    <td>
+      {{if not p.id==this and not p.document:}}
+      <input type="checkbox" id="depandant-{{=p.id}}" {{='checked' if p.layout_page==this else ''}} onchange="update_dependent(this);"/>
+      {{pass}}
+    </td>
+    <td>
+      {{if not p.id==this and not p.document:}}
+      <input id="child-{{=p.id}}" value="{{=(p.parent_page==this) and p.child_index or ''}}" onkeyup="update_child(this);" style="width:3em"/>
+      {{pass}}
+      {{if p.document:}}{{if p.parent_page==this:}}
+      (attached)
+      {{else:}}
+      {{=A('parent',_href=URL('read',args=p.parent_page),_target="_parent")}}
+      {{pass}}
+      {{pass}}
+    </td>
+  </tr>
+  {{pass}}
+</table>
+
+<script>
+  function update_child(name) {
+     var t = jQuery(name);
+     jQuery.post('{{=URL('add_to_menu',args=this)}}',
+                 'page_id='+t.attr('id').split('-')[1]+'&index='+t.val())
+     .error(function(){alert('network error')});
+  }
+  function update_dependent(name) {
+     var t = jQuery(name);     
+     jQuery.post('{{=URL('set_dependency',args=this)}}',
+                 'page_id='+t.attr('id').split('-')[1]+'&set='+(t.is(':checked')?'true':'false'))
+     .error(function(){alert('network error')});
+  }
+</script>

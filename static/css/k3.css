@@ -1,0 +1,85 @@
+body {
+  background: url('../images/background0188.jpg');
+  background-size: 100%;
+  font-family: helvetica;
+}
+a, a:hover, a:visited {
+  color: #FF5823;
+  text-decoration: none;
+}
+.boxed {
+        color: #FEFD95;
+        width:90%;
+        padding: 10px;
+        border: 5px solid black;
+        border-radius: 15px;
+        background-color: white;
+        color: #444;
+        -moz-border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+        -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+        box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+      }
+h1 {
+        color: white;
+        font-size: 40px;
+      }
+.image_carousel {
+      padding: 5px 0 5px 40px;
+      position: relative;
+}
+.image_carousel img {
+      border: 1px solid #ccc;
+      background-color: white;
+      padding: 9px;
+      margin: 7px;
+      display: block;
+      float: left;
+}
+a.prev, a.next {
+      background: url(../images/miscellaneous_sprite.png) 
+                  no-repeat transparent;
+      width: 45px;
+      height: 50px;
+      display: block;
+      position: absolute;
+      top: 85px;
+}
+a.prev {left: -32px;
+      background-position: 0 -100px; }
+      a.prev:hover {background-position: 0 -100px; }
+      a.prev.disabled {background-position: 0 -100px !important;  }
+a.next {right: -32px;
+      background-position: -50px -100px; }
+      a.next:hover {background-position: -50px -100px; }
+      a.next.disabled {background-position: -50px -100px !important;  }
+
+a.prev.disabled, a.next.disabled {
+      cursor: default;
+}
+
+a.prev span, a.next span {
+      display: none;
+}
+.pagination {
+      text-align: center;
+}
+.pagination a {
+      background: url(../images/miscellaneous_sprite.png) 0 -300px no-repeat transparent;
+      width: 15px;
+      height: 15px;
+      margin: 0 5px 0 0;
+      display: inline-block;
+}
+.pagination a.selected {
+      background-position: -25px -300px;
+      cursor: default;
+}
+.pagination a span {
+      display: none;
+}
+.clearfix {
+      float: none;
+      clear: both;
+}

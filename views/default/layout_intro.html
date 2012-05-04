@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Main page</title>
+    <link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+    <style>
+      body {
+        background: url({{=URL('static','images/background0188.jpg')}});
+        background-size: 100%;
+        font-family: helvetica;
+      }
+      a, a:hover, a:visited {
+        color: #FF5823;
+        text-decoration: none;
+      }
+      .boxed {
+        color: #FEFD95;
+        width:500px;
+        padding: 10px;
+        border: 5px solid black;
+        border-radius: 15px;
+        background-color: white;
+        color: #444;
+        -moz-border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+        -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+        box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+      }
+      h1 {
+        color: white;
+        font-size: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <center style="padding-top:100px">
+      {{include}}
+    </center>
+  </body>
+</html>

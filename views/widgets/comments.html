@@ -1,0 +1,40 @@
+<script type="text/javascript"><!--
+// These variables are used by the web2py_ajax_init function in web2py_ajax.js (which is loaded below).
+var w2p_ajax_confirm_message = "{{=T('Are you sure you want to delete this object?')}}";
+var w2p_ajax_date_format = "{{=T('%Y-%m-%d')}}";
+var w2p_ajax_datetime_format = "{{=T('%Y-%m-%d %H:%M:%S')}}";
+//--></script>
+
+<div id="comments" style="padding-top:100px">
+  {{for comment in comments:}}
+  {{=COMMENT(comment.created_on,comment.created_by.username,comment.id,comment.body,auth.user_id == page.owner)}}{{pass}}
+</div>
+
+<script>
+function clear_comment(obj,comment) {
+  if(jQuery(obj).val()==comment) jQuery(obj).val('');
+}
+function add_comment() {
+  var value = jQuery('#new_comment').val();
+  if(value && value!='add comment') {
+    var url = '{{=URL('add_comment',args=page.id)}}';
+    jQuery.ajax({type: "POST", url: url, data: 'comment='+escape(value),
+      success: function(msg) {
+        jQuery('#comments').append(msg); jQuery('#new_comment').val('');
+      }
+    });
+  }
+}
+</script>
+
+{{if auth.user:}}
+<div id="comment_div" class="hidden">
+<form>
+  <textarea id="new_comment" name="new_comment" onfocus="clear_comment(this,'add comment');">add comment</textarea><br/>
+  <input type="button" onclick="add_comment(); return false;" value="post"/>
+  <div id="target" style="visibility:hidden"></div>
+</form>
+</div>
+<a class="btn" href="#" onclick="jQuery('#comment_div').slideDown();jQuery(this).hide();return false;">comment</a>
+{{pass}}
+

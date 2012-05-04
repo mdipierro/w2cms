@@ -1,0 +1,17 @@
+ADD Extra widgets
+
+http://127.0.0.1:8000/plasmid/static/plugin_selectlist/cross-circle.png
+fix style of docs and tags
+create/delete groups?
+manage create and clone defaults
+permissions of attachments?
+
+
+fix order of @/id parsing and autolinks
+
+embed/slug-id
+media/slug-id.ext
+read/slug-id
+group/slug-id (?)
+
+

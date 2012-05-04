@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Main page</title>
+    <link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{=URL('static','css/k3.css')}}" rel="stylesheet" type="text/css" />
+    <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+    <script src="{{=URL('static','js/jquery.js')}}"></script>
+    <script src="{{=URL('static','js/jquery.carouFredSel-5.5.5-packed.js')}}"></script>
+  </head>
+  <body>
+    <center style="padding-top:100px">
+      <form action="{{=URL()}}" method="POST" class="form">
+	<div class="wrap boxed">
+	  <h4>Choose a Title</h4>
+	  <input name="title" value="{{=title}}" style="width:200px"/>
+	  <input type="hidden" name="theme" value="" />
+	  <hr/>
+	  <h4>Choose a Theme</h4>
+	  <div id="slider1" class="image_carousel">
+	    <div id="foo2">
+	      {{for theme in themes:}}
+	      <img src="{{=theme[1]}}" onclick="themeselect('{{=theme[0]}}');" style="height:200px"/>
+	      {{pass}}
+	    </div>
+	    <div class="clearfix"></div>
+	    <a class="prev" id="foo2_prev" href="#"><span>prev</span></a>
+	    <a class="next" id="foo2_next" href="#"><span>next</span></a>
+	  </div>
+	  <h4>Or clone a public page</h4>
+	  <input name="url" value="http://" style="width:200px"/>
+	  <hr/>
+	  <input type="submit" />	  
+	</div>      
+      </form>
+    </center>
+  </body>
+</html>
+
+<script type="text/javascript">
+function themeselect(name) {
+  jQuery('input[name=theme]').val(name);
+  jQuery('form').submit()
+}
+jQuery(window).load(function(){
+  jQuery("#foo2").carouFredSel({circular:true,infinite:true,auto: true,
+    scroll: {items: "page"},
+    prev: { button: "#foo2_prev", key: "left"},
+    next: { button: "#foo2_next", key: "right"},
+   });
+});
+</script>

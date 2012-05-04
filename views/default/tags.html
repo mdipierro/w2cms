@@ -1,0 +1,78 @@
+{{
+response.files.append(URL('static','plugin_jqueryui/css/ui-lightness/jquery-ui-1.8.19.custom.css'))
+response.files.append(URL('static','plugin_jqueryui/js/jquery-ui-1.8.19.custom.min.js'))
+response.files.append(URL('static','plugin_jqueryui/css/jquery.tagsinput.css'))
+response.files.append(URL('static','plugin_jqueryui/js/jquery.tagsinput.min.js'))
+}}
+{{extend 'default/layout_simple.html'}}
+<table class="table table-compact">
+  <tr>
+    <th>Title</th>
+    <td>
+      <form class="form-inline"/>
+      <input value="{{=page.title}}" name="title"/>
+      <input type="button" onclick="jQuery.post('{{=URL('set_title',args=page.id)}}','title='+escape(jQuery('input[name=title]').val()));return false;" value="save" />
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <th>Owner</th>
+    <td>
+      {{='%(first_name)s %(last_name)s' % page.owner}}
+    </td>
+  </tr>
+  <tr>
+    <th>Tags</th>
+    <td>
+      <input name="tags" id="tags" 
+	     value="{{=', '.join(t.name for t in tags)}}" />
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <th>Read Permissions</th>
+    <td>
+      <input name="read_groups" id="read_groups" 
+	     value="{{=', '.join((['everybody'] if page.public_read else []) + [t.auth_group.role for t in read_groups])}}" />
+    </td>
+    <td>
+      <input type="button" onclick="jQuery('#read_groups_tagsinput input').val('everybody');return false" value="public" />
+    </td>
+  </tr>
+  <tr>
+    <th>Edit Permissions</th>
+    <td>
+      <input name="edit_groups" id="edit_groups" 
+	     value="{{=', '.join((['everybody'] if page.public_edit else []) + [t.auth_group.role for t in edit_groups])}}" />
+    </td>
+    <td>
+      <input type="button" onclick="jQuery('#edit_groups_tagsinput input').val('everybody');return false" value="public" />
+    </td>
+  </tr>
+</table>
+
+<script>
+var interactive=true;
+function tagit(key,interactive,auto_url,add_url,del_url) {
+   jQuery(key).tagsInput({
+       'width':'100%',
+       'height':'auto',
+       'interactive':interactive,
+       'autocomplete_url':auto_url,
+       'onAddTag':function(a){jQuery.post(add_url+'?key='+escape(a));},
+       'onRemoveTag':function(a){jQuery.post(del_url+'?key='+escape(a));}
+   });
+}
+jQuery(document).ready(function(){
+   tagit('input#tags',interactive,'{{=URL('autotags')}}',
+         '{{=URL('add_tag',args=page.id)}}',
+         '{{=URL('del_tag',args=page.id)}}');
+   tagit('input#read_groups',interactive,'{{=URL('autogroups')}}',
+         '{{=URL('add_group',args=(page.id,'read'))}}',
+         '{{=URL('del_group',args=(page.id,'read'))}}');
+   tagit('input#edit_groups',interactive,'{{=URL('autogroups')}}',
+         '{{=URL('add_group',args=(page.id,'edit'))}}',
+         '{{=URL('del_group',args=(page.id,'edit'))}}');
+});
+</script>
